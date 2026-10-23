@@ -1,0 +1,785 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Słoik życzeń</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Caveat:wght@500;700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: jedna kolumna jak półka w kuchni — słoik w centrum, pod nim kolekcja wyjętych karteczek */
+:root {
+  --bg: #EEEFF6;
+  --surface: #FFFFFF;
+  --ink: #2A2540;
+  --muted: #6B6680;
+  --accent: #B8336A;
+  --accent-ink: #FFFFFF;
+  --line: #D9D7E6;
+  --glass: rgba(200, 214, 236, 0.35);
+  --glass-edge: #9AA6C4;
+  --glare: rgba(255, 255, 255, 0.75);
+  --lid: #5A4E7C;
+  --lid-hi: #7A6EA0;
+  --scrim: rgba(30, 24, 50, 0.55);
+  /* papier karteczek — taki sam w obu motywach */
+  --p1: #F7C6D0; --p2: #F6E3A1; --p3: #BFE3D0; --p4: #D6CCF2; --p5: #BFD9F2;
+  --paper-ink: #2B2633;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17142A; --surface: #221E38; --ink: #ECE8F7; --muted: #A39DB8;
+    --accent: #F07AA6; --accent-ink: #2A1020; --line: #37325A;
+    --glass: rgba(150, 170, 220, 0.12); --glass-edge: #7884A8; --glare: rgba(255, 255, 255, 0.35);
+    --lid: #8C7FBF; --lid-hi: #A99DD6; --scrim: rgba(8, 6, 18, 0.7);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17142A; --surface: #221E38; --ink: #ECE8F7; --muted: #A39DB8;
+  --accent: #F07AA6; --accent-ink: #2A1020; --line: #37325A;
+  --glass: rgba(150, 170, 220, 0.12); --glass-edge: #7884A8; --glare: rgba(255, 255, 255, 0.35);
+  --lid: #8C7FBF; --lid-hi: #A99DD6; --scrim: rgba(8, 6, 18, 0.7);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 56px;
+}
+main { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px; }
+
+header { text-align: center; display: flex; flex-direction: column; gap: 6px; }
+.eyebrow {
+  font-family: var(--font-hand); font-weight: 700; font-size: 26px;
+  color: var(--accent); line-height: 1;
+}
+h1 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(36px, 10vw, 52px); line-height: 1.02; letter-spacing: -0.02em;
+  margin: 0; text-wrap: balance;
+}
+.lead { margin: 4px auto 0; color: var(--muted); max-width: 34ch; text-wrap: balance; }
+
+/* Słoik */
+.stage { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.jar-btn {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  width: min(270px, 78vw); max-width: 100%;
+  border-radius: 24px;
+  -webkit-tap-highlight-color: transparent;
+}
+.jar-btn:disabled { cursor: default; }
+.jar-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
+.jar-btn svg { display: block; width: 100%; height: auto; overflow: visible; }
+.jar-btn.shake svg { animation: shake 0.6s ease-in-out; transform-origin: 50% 90%; }
+@keyframes shake {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-5deg); }
+  40% { transform: rotate(4deg); }
+  60% { transform: rotate(-3deg); }
+  80% { transform: rotate(2deg); }
+}
+.glass-body { fill: var(--glass); stroke: var(--glass-edge); stroke-width: 2.5; }
+.glass-rim { fill: none; stroke: var(--glass-edge); stroke-width: 2.5; }
+.glare { fill: var(--glare); }
+.lid { fill: var(--lid); }
+.lid-hi { fill: var(--lid-hi); }
+.ribbon { fill: var(--accent); }
+.tag { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.tag-text { font-family: var(--font-hand); font-weight: 700; font-size: 17px; fill: var(--ink); }
+.tag-string { stroke: var(--muted); stroke-width: 1.2; fill: none; }
+.note-fold { stroke: rgba(43, 38, 51, 0.18); stroke-width: 1; }
+
+.draw {
+  font: 600 17px/1 var(--font-body);
+  background: var(--accent); color: var(--accent-ink);
+  border: 0; border-radius: 999px; padding: 15px 26px; cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+.draw:hover:not(:disabled) { transform: translateY(-1px); }
+.draw:active:not(:disabled) { transform: translateY(1px); }
+.draw:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.draw:disabled { opacity: 0.4; cursor: default; }
+
+.status { text-align: center; display: flex; flex-direction: column; gap: 2px; }
+.status-main { font-weight: 600; font-size: 17px; margin: 0; text-wrap: balance; }
+.status-sub { color: var(--muted); font-size: 14px; margin: 0; font-variant-numeric: tabular-nums; }
+
+/* Kolekcja */
+.collection { display: flex; flex-direction: column; gap: 14px; }
+.collection h2 {
+  font-family: var(--font-display); font-weight: 700; font-size: 22px;
+  margin: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+}
+.collection h2 span { font-family: var(--font-body); font-weight: 500; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.slips { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.slip {
+  text-align: left; border: 0; cursor: pointer; border-radius: 4px;
+  padding: 12px 14px 14px; min-height: 104px; min-width: 0;
+  color: var(--paper-ink); display: flex; flex-direction: column; gap: 4px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.06), 0 6px 14px -8px rgba(30, 20, 60, 0.35);
+  transition: transform 0.15s ease;
+}
+.slip:hover { transform: rotate(-1deg) translateY(-2px); }
+.slip:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.slip-no { font: 600 11px/1 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6; }
+.slip-text {
+  font-family: var(--font-hand); font-weight: 500; font-size: 20px; line-height: 1.15;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.empty {
+  border: 1.5px dashed var(--line); border-radius: 12px; padding: 22px 18px;
+  color: var(--muted); text-align: center; margin: 0;
+}
+
+/* Rozwinięta karteczka */
+.overlay {
+  position: fixed; inset: 0; z-index: 20;
+  background: var(--scrim);
+  display: flex; align-items: center; justify-content: center;
+  padding: max(20px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(20px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  animation: fade 0.25s ease;
+}
+@keyframes fade { from { opacity: 0; } }
+.card {
+  width: min(380px, 100%);
+  color: var(--paper-ink);
+  border-radius: 4px;
+  padding: 26px 26px 22px;
+  display: flex; flex-direction: column; gap: 16px;
+  box-shadow: 0 30px 60px -20px rgba(10, 5, 30, 0.6);
+  transform: rotate(-1.5deg);
+  animation: unfold 0.65s cubic-bezier(.2,.9,.25,1.15);
+  background-image: repeating-linear-gradient(to bottom, transparent 0 37px, rgba(43,38,51,0.09) 37px 38px);
+  background-position: 0 58px;
+}
+@keyframes unfold {
+  0% { transform: translateY(30vh) rotate(18deg) scale(0.2, 0.08); opacity: 0; }
+  45% { transform: translateY(-10px) rotate(-6deg) scale(0.7, 0.18); opacity: 1; }
+  100% { transform: rotate(-1.5deg) scale(1); }
+}
+.card-meta { display: flex; justify-content: space-between; gap: 10px; font: 600 12px/1.2 var(--font-body); letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.6; }
+.card-text { font-family: var(--font-hand); font-weight: 500; font-size: 31px; line-height: 1.2; margin: 0; text-wrap: pretty; }
+.card-sign { font-family: var(--font-hand); font-weight: 700; font-size: 24px; text-align: right; margin: 0; opacity: 0.8; }
+.close {
+  align-self: center; margin-top: 4px;
+  font: 600 15px/1 var(--font-body);
+  background: var(--paper-ink); color: #FFFFFF; border: 0; border-radius: 999px;
+  padding: 12px 20px; cursor: pointer;
+}
+.close:focus-visible { outline: 3px solid var(--paper-ink); outline-offset: 3px; }
+
+/* Zdjęcia na karteczkach */
+/* Opcje na dole */
+.tools {
+  border-top: 1px solid var(--line); padding-top: 20px;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px;
+}
+.linkbtn {
+  background: none; border: 0; padding: 6px 2px; cursor: pointer;
+  font: 500 15px/1.3 var(--font-body); color: var(--muted);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line);
+}
+.linkbtn:hover { color: var(--ink); }
+.linkbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.confirm {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 18px; display: flex; flex-direction: column; gap: 14px;
+}
+.confirm p { margin: 0; text-wrap: pretty; }
+.confirm-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn-yes {
+  font: 600 15px/1 var(--font-body); background: var(--accent); color: var(--accent-ink);
+  border: 0; border-radius: 999px; padding: 12px 18px; cursor: pointer;
+}
+.btn-no {
+  font: 600 15px/1 var(--font-body); background: transparent; color: var(--ink);
+  border: 1.5px solid var(--line); border-radius: 999px; padding: 11px 18px; cursor: pointer;
+}
+.btn-yes:focus-visible, .btn-no:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+/* Bon: bilet z perforacją i odcinkiem */
+:root {
+  --bon-a: #7E1E4C; --bon-b: #C2417A; --bon-gold: #F4CE7A; --bon-ink: #FFFFFF; --bon-btn-ink: #3A1426;
+}
+.bon-wrap {
+  width: min(380px, 100%);
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+  animation: bonIn 0.75s cubic-bezier(.2,.9,.25,1.2) both;
+}
+@keyframes bonIn {
+  0% { transform: scale(0.3) rotate(-14deg); opacity: 0; }
+  60% { transform: scale(1.05) rotate(2deg); opacity: 1; }
+  100% { transform: scale(1) rotate(-1.5deg); }
+}
+.bon-holder { width: 100%; filter: drop-shadow(0 26px 30px rgba(10, 5, 30, 0.55)); }
+.bon {
+  --stub: 60px;
+  position: relative; overflow: hidden;
+  color: var(--bon-ink);
+  border-radius: 18px;
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 11px),
+    linear-gradient(140deg, var(--bon-a), var(--bon-b));
+  -webkit-mask:
+    radial-gradient(circle 15px at 0 calc(100% - var(--stub)), #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 15px at 100% calc(100% - var(--stub)), #0000 97%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle 15px at 0 calc(100% - var(--stub)), #0000 97%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle 15px at 100% calc(100% - var(--stub)), #0000 97%, #000) right / 51% 100% no-repeat;
+}
+.bon-main {
+  position: relative;
+  margin: 12px 12px 0;
+  padding: 18px 20px 22px;
+  border: 1.5px solid rgba(244, 206, 122, 0.55);
+  border-bottom: 0;
+  border-radius: 10px 10px 0 0;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.bon-main::after {
+  content: "♥"; position: absolute; right: 10px; bottom: -34px;
+  font-size: 150px; line-height: 1; color: rgba(255, 255, 255, 0.07); pointer-events: none;
+}
+.bon-top {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+  font: 600 12px/1.2 var(--font-body); letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--bon-gold);
+}
+.bon-no { font-variant-numeric: tabular-nums; letter-spacing: 0.08em; }
+.bon-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(28px, 8vw, 34px); line-height: 1.04; letter-spacing: -0.01em;
+  margin: 6px 0 0; text-wrap: balance; position: relative;
+}
+.bon-text { font-family: var(--font-hand); font-weight: 500; font-size: 25px; line-height: 1.2; margin: 0; opacity: 0.92; position: relative; }
+.bon-stub {
+  height: var(--stub);
+  margin: 0 22px;
+  border-top: 2px dashed rgba(255, 255, 255, 0.4);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font: 600 11px/1.2 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--bon-gold);
+}
+.close-bon { background: var(--bon-gold); color: var(--bon-btn-ink); }
+.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 30; }
+
+.slip-bon {
+  color: var(--bon-ink);
+  background: linear-gradient(140deg, var(--bon-a), var(--bon-b));
+  outline: 1.5px dashed rgba(255, 255, 255, 0.35); outline-offset: -6px;
+}
+.slip-bon .slip-no { color: var(--bon-gold); opacity: 1; }
+.slip-title { font-family: var(--font-display); font-weight: 700; font-size: 19px; line-height: 1.1; text-wrap: balance; }
+.slip-bon:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { .bon-wrap { animation: none; } }
+
+.preview-flag {
+  font: 600 12px/1 var(--font-body); letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--muted); text-align: center; margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jar-btn.shake svg, .card, .overlay { animation: none; }
+  .slip, .draw { transition: none; }
+}
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">dla Mamy, z okazji urodzin</div>
+    <h1>Słoik życzeń</h1>
+    <p class="lead">W środku czekają karteczki z naszymi życzeniami. Wyjmuj je, kiedy tylko masz ochotę.</p>
+  </header>
+
+  <section class="stage">
+    <button class="jar-btn" id="jar" type="button" aria-label="Wyjmij karteczkę ze słoika">
+      <svg viewBox="0 0 260 340" aria-hidden="true">
+        <defs>
+          <clipPath id="jarClip">
+            <path d="M84 66 L176 66 L176 82 C176 94 220 100 220 128 L220 294 C220 310 208 320 192 320 L68 320 C52 320 40 310 40 294 L40 128 C40 100 84 94 84 82 Z"/>
+          </clipPath>
+        </defs>
+        <path class="glass-body" d="M84 66 L176 66 L176 82 C176 94 220 100 220 128 L220 294 C220 310 208 320 192 320 L68 320 C52 320 40 310 40 294 L40 128 C40 100 84 94 84 82 Z"/>
+        <g id="notes" clip-path="url(#jarClip)"></g>
+        <path class="glare" d="M54 136 C54 120 64 112 74 108 C66 118 64 130 64 142 L64 270 C64 280 60 286 56 284 C55 284 54 282 54 278 Z"/>
+        <path class="glare" d="M196 268 C200 268 204 270 204 276 L204 290 C204 296 200 298 198 296 C196 294 196 290 196 286 Z" opacity="0.6"/>
+        <!-- pokrywka -->
+        <rect class="lid" x="74" y="36" width="112" height="32" rx="7"/>
+        <rect class="lid-hi" x="80" y="40" width="100" height="6" rx="3"/>
+        <!-- wstążka z kokardą -->
+        <rect class="ribbon" x="82" y="72" width="96" height="9" rx="3"/>
+        <path class="ribbon" d="M178 76 C196 62 210 70 204 80 C200 88 186 84 178 76 Z"/>
+        <path class="ribbon" d="M178 76 C194 86 204 100 196 104 C188 108 182 92 178 76 Z" opacity="0.85"/>
+        <circle class="ribbon" cx="178" cy="76" r="5"/>
+        <!-- zawieszka -->
+        <path class="tag-string" d="M184 80 C200 100 206 112 204 124"/>
+        <g transform="rotate(8 206 140)">
+          <rect class="tag" x="176" y="124" width="66" height="30" rx="5"/>
+          <text class="tag-text" x="209" y="145" text-anchor="middle">dla Mamy</text>
+        </g>
+      </svg>
+    </button>
+
+    <div class="status" aria-live="polite">
+      <p class="status-main" id="statusMain">Pierwsza karteczka czeka na Ciebie.</p>
+      <p class="status-sub" id="statusSub">W słoiku: 30 z 30</p>
+    </div>
+    <button class="draw" id="drawBtn" type="button">Wyjmij karteczkę</button>
+    <p class="preview-flag" id="previewFlag" hidden>Tryb podglądu: postęp nie jest zapisywany</p>
+  </section>
+
+  <section class="collection" aria-labelledby="collTitle">
+    <h2 id="collTitle">Wyjęte karteczki <span id="collCount">0</span></h2>
+    <div class="slips" id="slips"></div>
+    <p class="empty" id="empty">Tu będą zbierać się wszystkie przeczytane życzenia, żeby można było do nich wracać.</p>
+  </section>
+
+  <section class="tools-wrap" aria-label="Opcje słoika">
+    <div class="tools">
+      <button class="linkbtn" id="allBtn" type="button">Otwórz wszystkie naraz</button>
+      <button class="linkbtn" id="resetBtn" type="button">Zacznij od nowa</button>
+    </div>
+    <div class="confirm" id="confirm" hidden>
+      <p id="confirmText"></p>
+      <div class="confirm-actions">
+        <button class="btn-yes" id="confirmYes" type="button">Tak</button>
+        <button class="btn-no" id="confirmNo" type="button">Anuluj</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="card" id="card" role="dialog" aria-modal="true" aria-labelledby="cardText" hidden>
+    <div class="card-meta"><span id="cardNo">Karteczka 1</span><span id="cardDate"></span></div>
+    <p class="card-text" id="cardText"></p>
+    <p class="card-sign">Twoi synowie ♥</p>
+    <button class="close" id="closeBtn" type="button">Schowaj do kolekcji</button>
+  </div>
+  <div class="bon-wrap" id="bonWrap" role="dialog" aria-modal="true" aria-labelledby="bonTitle" hidden>
+    <div class="bon-holder">
+      <div class="bon">
+        <div class="bon-main">
+          <div class="bon-top"><span>Bon podarunkowy</span><span class="bon-no" id="bonNo">Nr 1</span></div>
+          <h3 class="bon-title" id="bonTitle"></h3>
+          <p class="bon-text" id="bonText"></p>
+        </div>
+        <div class="bon-stub"><span>Ważny bez terminu</span><span>Wystawcy: Twoi synowie</span></div>
+      </div>
+    </div>
+    <button class="close close-bon" id="closeBon" type="button">Schowaj bon do kolekcji</button>
+  </div>
+</div>
+<canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+
+<script>
+// ===== Treść słoika =====
+// Zwykłe karteczki z życzeniami (pierwsza to powitanie, ostatnia to zakończenie)
+const NOTES = [
+  "Wszystkiego najlepszego z okazji urodzin, Mamo! Schowaliśmy w tym słoiku życzenia dla Ciebie. Wyjmuj je, kiedy tylko masz ochotę.",
+  "Życzymy Ci radości z pracy i satysfakcji z każdej rzeczy, którą robisz tak dobrze.",
+  "Niech Pan Bóg błogosławi Ci w każdym dniu tego nowego roku.",
+  "Życzymy Ci udanych wyjazdów: w góry, za granicę i wszędzie tam, dokąd Cię poniesie.",
+  "Oby doba miała 25 godzin. A ta jedna dodatkowa była tylko dla Ciebie.",
+  "Życzymy Ci odkrywania nowych pasji i odwagi, żeby od razu się za nie zabierać.",
+  "Niech remont pokoju przebiegnie szybko i bezboleśnie. Dla wszystkich domowników.",
+  "Życzymy Ci natrafiania na same świetne okazje. Najlepiej takie, o których jeszcze nie wiesz, że ich potrzebujesz.",
+  "Życzymy Ci wygrywania w planszówki ze swoimi synami (i córkami). Choć łatwo nie odpuścimy!",
+  "Życzymy Ci czasu tylko dla siebie, nawet w tym zabieganym świecie.",
+  "Życzymy Ci coraz głębszych relacji z najbliższymi i wielu rozmów, które zostają w sercu.",
+  "Życzymy Ci kolejnych ukończonych kursów i radości z uczenia się nowych rzeczy.",
+  "Życzymy Ci zdobycia całej Korony Gór Polski. Aż do ostatniego szczytu!",
+  "Żeby skarpetki po praniu zawsze wracały do pary.",
+  "Żeby w sklepie otwierali nową kasę akurat wtedy, kiedy podchodzisz.",
+  "Żebyś zawsze była z nas dumna. Pracujemy nad tym!",
+  "Żeby w każdym schronisku czekała świeża szarlotka i wolne miejsce przy stole.",
+  "Żeby bilety lotnicze zawsze były w promocji, a walizka mieściła się w limicie co do grama.",
+  "Oby każdy poniedziałek był odrobinę łatwiejszy niż poprzedni.",
+  "Żeby pralka, zmywarka i cała reszta sprzętów żyły długo i nie psuły się w najgorszym momencie.",
+  "Żeby zawsze było gdzie zaparkować. Najlepiej pod samym wejściem.",
+  "Żebyś nigdy nie musiała o nic prosić nas dwa razy. Obiecujemy poprawę.",
+  "Żeby Twoi synowie wynosili śmieci sami z siebie, bez przypominania. (Ten punkt bierzemy do siebie.)",
+  "Żeby telefon miał zasięg i baterię zawsze wtedy, kiedy najbardziej trzeba.",
+  "Dziękujemy, że zawsze jesteś. Życzymy Ci, żeby ktoś dbał o Ciebie tak, jak Ty dbasz o nas. Mamy nadzieję, że to my.",
+  "Życzymy Ci, żebyś zawsze pamiętała, jak bardzo jesteś dla nas ważna.",
+  "Niech ten rok będzie najlepszy z dotychczasowych, a każdy następny jeszcze lepszy. Kochamy Cię, Mamo!"
+];
+
+// Bony do zrealizowania
+const BONS = [
+  { title: "Dzień bez gotowania", text: "Synowie stają przy garach, a Ty odpoczywasz." },
+  { title: "Wyjście do kina", text: "Ty wybierasz film, my stawiamy bilety i popcorn." },
+  { title: "Wieczór planszówek", text: "Ty wybierasz grę, my przegrywamy z godnością." },
+  { title: "Wieczór z serialem", text: "Koc, herbata i przekąski są po naszej stronie." },
+  { title: "Śniadanie do łóżka", text: "Z kawą dokładnie taką, jaką lubisz." }
+];
+
+const BON_EVERY = 6; // co szósta karteczka to bon
+
+// Składamy słoik: zwykłe karteczki, a co BON_EVERY-ta pozycja to bon
+const ITEMS = [];
+let noteIndex = 0;
+let bonIndex = 0;
+while (noteIndex < NOTES.length || bonIndex < BONS.length) {
+  const position = ITEMS.length + 1;
+  const bonTime = position % BON_EVERY === 0;
+  if ((bonTime && bonIndex < BONS.length) || noteIndex >= NOTES.length) {
+    ITEMS.push({ type: "bon", title: BONS[bonIndex].title, text: BONS[bonIndex].text, bonNumber: bonIndex + 1 });
+    bonIndex++;
+  } else {
+    ITEMS.push({ type: "note", text: NOTES[noteIndex] });
+    noteIndex++;
+  }
+}
+
+const FINAL = "Słoik jest już pusty, ale życzeń mamy dla Ciebie dużo, dużo więcej. Kochamy Cię, Mamo!";
+const PAPERS = ["var(--p1)", "var(--p2)", "var(--p3)", "var(--p4)", "var(--p5)"];
+const MONTHS = ["stycznia","lutego","marca","kwietnia","maja","czerwca","lipca","sierpnia","września","października","listopada","grudnia"];
+const KEY = "sloik-powodow-v1";
+const PREVIEW = location.hash === "#podglad";
+const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// ===== Daty =====
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+}
+function prettyDate(s) {
+  const p = s.split("-");
+  return Number(p[2]) + " " + MONTHS[Number(p[1]) - 1];
+}
+function plural(n, one, few, many) {
+  if (n === 1) return one;
+  const last = n % 10, last2 = n % 100;
+  if (last >= 2 && last <= 4 && (last2 < 12 || last2 > 14)) return few;
+  return many;
+}
+
+// ===== Stan (zapis w przeglądarce Mamy) =====
+let state = { start: todayStr(), dates: [] };
+function load() {
+  if (PREVIEW) return;
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (saved && Array.isArray(saved.dates)) state = saved;
+    }
+  } catch (e) {}
+  if (state.dates.length > ITEMS.length) state.dates = state.dates.slice(0, ITEMS.length);
+  save();
+}
+function save() {
+  if (PREVIEW) return;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+}
+function openedCount() { return state.dates.length; }
+
+// ===== Karteczki w słoiku =====
+function seeded(seed) {
+  return function () {
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const notePositions = [];
+const rnd = seeded(7);
+for (let i = 0; i < ITEMS.length; i++) {
+  const row = Math.floor(i / 6);
+  const col = i % 6;
+  notePositions.push({
+    x: 50 + col * 27 + (row % 2) * 12 + (rnd() - 0.5) * 12,
+    y: 300 - row * 17 + (rnd() - 0.5) * 8,
+    rot: (rnd() - 0.5) * 70,
+    color: i % PAPERS.length
+  });
+}
+
+function renderJar() {
+  const remaining = ITEMS.length - openedCount();
+  let html = "";
+  for (let i = 0; i < remaining; i++) {
+    const p = notePositions[i];
+    html += '<g transform="translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ') rotate(' + p.rot.toFixed(1) + ')">' +
+      '<rect x="-17" y="-9" width="34" height="18" rx="2" style="fill:' + PAPERS[p.color] + '"/>' +
+      '<line class="note-fold" x1="-17" y1="0" x2="17" y2="0"/></g>';
+  }
+  document.getElementById("notes").innerHTML = html;
+}
+
+// ===== Widok =====
+const el = function (id) { return document.getElementById(id); };
+
+function render() {
+  const opened = openedCount();
+  const total = ITEMS.length;
+  const remaining = total - opened;
+
+  let bonsLeft = 0;
+  for (let i = opened; i < total; i++) {
+    if (ITEMS[i].type === "bon") bonsLeft++;
+  }
+
+  renderJar();
+  let sub = "W słoiku: " + remaining + " z " + total;
+  if (bonsLeft > 0) sub += ", w tym " + bonsLeft + " " + plural(bonsLeft, "ukryty bon", "ukryte bony", "ukrytych bonów");
+  el("statusSub").textContent = sub;
+
+  if (remaining === 0) {
+    el("statusMain").textContent = FINAL;
+  } else if (opened === 0) {
+    el("statusMain").textContent = "Pierwsza karteczka czeka na Ciebie.";
+  } else {
+    el("statusMain").textContent = "Zostało jeszcze " + remaining + " " + plural(remaining, "karteczka", "karteczki", "karteczek") + ". Wyjmij kolejną, kiedy chcesz.";
+  }
+
+  el("drawBtn").disabled = remaining === 0;
+  el("jar").disabled = remaining === 0;
+  el("drawBtn").textContent = remaining === 0 ? "Słoik jest pusty" : "Wyjmij karteczkę";
+
+  // kolekcja
+  el("collCount").textContent = opened + " / " + total;
+  el("empty").hidden = opened > 0;
+  let slips = "";
+  for (let i = opened - 1; i >= 0; i--) {
+    const item = ITEMS[i];
+    if (item.type === "bon") {
+      slips += '<button class="slip slip-bon" type="button" data-i="' + i + '">' +
+        '<span class="slip-no">Bon ' + item.bonNumber + ' · ' + prettyDate(state.dates[i]) + '</span>' +
+        '<span class="slip-title">' + item.title + '</span></button>';
+    } else {
+      slips += '<button class="slip" type="button" data-i="' + i + '" style="background:' + PAPERS[i % PAPERS.length] + '">' +
+        '<span class="slip-no">nr ' + (i + 1) + ' · ' + prettyDate(state.dates[i]) + '</span>' +
+        '<span class="slip-text">' + item.text + '</span></button>';
+    }
+  }
+  el("slips").innerHTML = slips;
+  el("allBtn").hidden = remaining === 0;
+  el("resetBtn").hidden = opened === 0;
+}
+
+// ===== Pokazywanie karteczki lub bonu =====
+let lastFocus = null;
+function showItem(i, celebrate) {
+  lastFocus = document.activeElement;
+  const item = ITEMS[i];
+  el("overlay").hidden = false;
+  if (item.type === "bon") {
+    el("card").hidden = true;
+    el("bonWrap").hidden = false;
+    el("bonNo").textContent = "Nr " + item.bonNumber + " z " + BONS.length;
+    el("bonTitle").textContent = item.title;
+    el("bonText").textContent = item.text;
+    el("closeBon").focus();
+    if (celebrate) confettiBurst();
+  } else {
+    el("bonWrap").hidden = true;
+    el("card").hidden = false;
+    el("card").style.backgroundColor = PAPERS[i % PAPERS.length];
+    el("cardNo").textContent = "Karteczka " + (i + 1) + " z " + ITEMS.length;
+    el("cardDate").textContent = prettyDate(state.dates[i]);
+    el("cardText").textContent = item.text;
+    el("closeBtn").textContent = i === ITEMS.length - 1 ? "Zamknij" : "Schowaj do kolekcji";
+    el("closeBtn").focus();
+  }
+}
+function closeItem() {
+  el("overlay").hidden = true;
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+// ===== Fanfary (generowane w przeglądarce, bez plików dźwiękowych) =====
+let audioCtx = null;
+function trumpet(freq, at, dur) {
+  const osc = audioCtx.createOscillator();
+  const filter = audioCtx.createBiquadFilter();
+  const gain = audioCtx.createGain();
+  osc.type = "sawtooth";
+  osc.frequency.value = freq;
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(900, at);
+  filter.frequency.linearRampToValueAtTime(3000, at + 0.05);
+  gain.gain.setValueAtTime(0.0001, at);
+  gain.gain.exponentialRampToValueAtTime(0.11, at + 0.03);
+  gain.gain.setValueAtTime(0.11, at + dur * 0.7);
+  gain.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(at);
+  osc.stop(at + dur + 0.05);
+}
+function playFanfare(delay) {
+  try {
+    if (!audioCtx) {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      audioCtx = new AC();
+    }
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    const start = audioCtx.currentTime + delay;
+    // [częstotliwość, kiedy, jak długo]: ta-ta-ta-taaa, ta-ta-taaaaa
+    const tune = [
+      [523.25, 0.00, 0.13], [523.25, 0.15, 0.13], [523.25, 0.30, 0.13], [659.25, 0.45, 0.30],
+      [523.25, 0.80, 0.13], [659.25, 0.95, 0.13], [783.99, 1.10, 0.95], [392.00, 1.10, 0.95], [523.25, 1.10, 0.95]
+    ];
+    for (let i = 0; i < tune.length; i++) {
+      trumpet(tune[i][0], start + tune[i][1], tune[i][2]);
+    }
+  } catch (e) {}
+}
+
+// ===== Konfetti =====
+function confettiBurst() {
+  if (reduced) return;
+  const canvas = el("confetti");
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  canvas.width = w * dpr;
+  canvas.height = h * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const colors = ["#F4CE7A", "#C2417A", "#BFE3D0", "#D6CCF2", "#F7C6D0", "#BFD9F2", "#FFFFFF"];
+  const pieces = [];
+  for (let i = 0; i < 180; i++) {
+    const fromLeft = i % 2 === 0;
+    const angle = fromLeft ? -Math.PI / 3 - Math.random() * 0.5 : -2 * Math.PI / 3 + Math.random() * 0.5;
+    const speed = 9 + Math.random() * 10;
+    pieces.push({
+      x: fromLeft ? -10 : w + 10,
+      y: h * 0.85,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      size: 6 + Math.random() * 6,
+      rot: Math.random() * 6.28,
+      vr: (Math.random() - 0.5) * 0.3,
+      color: colors[i % colors.length],
+      round: i % 4 === 0
+    });
+  }
+  let frame = 0;
+  function tick() {
+    frame++;
+    ctx.clearRect(0, 0, w, h);
+    let alive = 0;
+    for (let i = 0; i < pieces.length; i++) {
+      const p = pieces[i];
+      p.vy += 0.22;
+      p.vx *= 0.985;
+      p.vy *= 0.985;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      if (p.y < h + 20) alive++;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      if (p.round) {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size / 3, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        ctx.scale(1, Math.cos(p.rot * 2));
+        ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      }
+      ctx.restore();
+    }
+    if (alive > 0 && frame < 360) requestAnimationFrame(tick);
+    else ctx.clearRect(0, 0, w, h);
+  }
+  requestAnimationFrame(tick);
+}
+
+// ===== Wyjmowanie =====
+let busy = false;
+function draw() {
+  if (busy) return;
+  const opened = openedCount();
+  if (opened >= ITEMS.length) return;
+  busy = true;
+  if (ITEMS[opened].type === "bon") playFanfare(reduced ? 0 : 0.6);
+  const jar = el("jar");
+  jar.classList.remove("shake");
+  void jar.offsetWidth;
+  jar.classList.add("shake");
+  setTimeout(function () {
+    state.dates.push(todayStr());
+    save();
+    render();
+    showItem(opened, true);
+    jar.classList.remove("shake");
+    busy = false;
+  }, reduced ? 0 : 600);
+}
+
+// ===== Otwórz wszystkie / zacznij od nowa (z potwierdzeniem na stronie) =====
+let pendingAction = null;
+function askConfirm(text, yesLabel, action) {
+  pendingAction = action;
+  el("confirmText").textContent = text;
+  el("confirmYes").textContent = yesLabel;
+  el("confirm").hidden = false;
+  el("confirmNo").focus();
+}
+function hideConfirm() {
+  el("confirm").hidden = true;
+  pendingAction = null;
+}
+el("allBtn").addEventListener("click", function () {
+  askConfirm("Otworzyć od razu wszystkie pozostałe karteczki? Słoik się opróżni, a wszystkie trafią do kolekcji.",
+    "Tak, pokaż wszystkie", function () {
+      const today = todayStr();
+      while (state.dates.length < ITEMS.length) state.dates.push(today);
+      save();
+      render();
+      el("collTitle").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+});
+el("resetBtn").addEventListener("click", function () {
+  askConfirm("Zacząć od nowa? Wszystkie karteczki wrócą do słoika i będzie można wyjmować je od początku.",
+    "Tak, zacznij od nowa", function () {
+      state = { start: todayStr(), dates: [] };
+      save();
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+});
+el("confirmYes").addEventListener("click", function () {
+  const action = pendingAction;
+  hideConfirm();
+  if (action) action();
+});
+el("confirmNo").addEventListener("click", hideConfirm);
+
+el("drawBtn").addEventListener("click", draw);
+el("jar").addEventListener("click", draw);
+el("closeBtn").addEventListener("click", closeItem);
+el("closeBon").addEventListener("click", closeItem);
+el("overlay").addEventListener("click", function (e) { if (e.target === el("overlay")) closeItem(); });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !el("overlay").hidden) closeItem(); });
+el("slips").addEventListener("click", function (e) {
+  const b = e.target.closest(".slip");
+  if (b) showItem(Number(b.dataset.i), false);
+});
+
+el("previewFlag").hidden = !PREVIEW;
+load();
+render();
+</script>
+
+</body></html>
